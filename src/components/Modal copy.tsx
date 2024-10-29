@@ -1,12 +1,26 @@
-import { useEffect, useRef, Fragment } from 'react';
-import { useModal } from '../context/modalContext';
+import { useEffect, useRef } from "react";
+import { Fragment } from "react";
+export interface ModalProps {
+  modalType: string;
+  modalOpen: boolean;
+  setModalOpen?: (open: boolean) => void;
+}
 
-const Modal: React.FC = () => {
-  const { modalOpen, setModalOpen, modalType } = useModal();
+const Modal: React.FC<ModalProps> = ({
+  modalType = null,
+  modalOpen = false,
+  setModalOpen = () => {},
+}) => {
   if (!modalType) return null;
 
   const dialogRef = useRef<HTMLDialogElement>(null);
-
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (dialog) {
+      if (modalOpen) dialog.showModal();
+      else dialog.close();
+    }
+  }, [modalOpen]);
 
   const newTaskModal = (
     <Fragment>
@@ -40,16 +54,12 @@ const Modal: React.FC = () => {
     </Fragment>
   );
 
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (dialog) {
-      if (modalOpen) dialog.showModal();
-      else dialog.close();
-    }
-  }, [modalOpen]);
-
   return (
-    <dialog ref={dialogRef} id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+    <dialog
+      ref={dialogRef}
+      id="my_modal_5"
+      className="modal modal-bottom sm:modal-middle"
+    >
       {/* <div className="modal-box">
         <h3 className="font-bold text-lg">Hello!</h3>
         <p className="py-4">Press ESC key or click the button below to close</p>

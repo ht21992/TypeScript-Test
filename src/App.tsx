@@ -4,7 +4,8 @@ import Menu from "./components/Menu";
 import Input from "./components/Input";
 import { TaskProps } from "./components/Task";
 import { useState } from "react";
-
+import { ModalProvider } from "./context/modalContext";
+import Modal from "./components/Modal";
 
 function App() {
   const fetchedTasks: Array<TaskProps> = [
@@ -15,7 +16,7 @@ function App() {
   ];
 
   const [tasks, setTasks] = useState<Array<TaskProps>>(fetchedTasks);
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  // const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>("");
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,18 +37,24 @@ function App() {
 
   return (
     <>
-      <Menu modalType="new task" setModalOpen={setModalOpen} modalOpen={modalOpen} />
-      <label className="input input-bordered flex items-center gap-2 my-4">
-        <Input
-          type="text"
-          placeholder="Search"
-          value={inputValue}
-          onChange={handleSearchInputChange}
-          className="grow"
+      <ModalProvider>
+        <Menu />
+        <label className="input input-bordered flex items-center gap-2 my-4">
+          <Input
+            type="text"
+            placeholder="Search"
+            value={inputValue}
+            onChange={handleSearchInputChange}
+            className="grow"
+          />
+        </label>
+        {tasks.length ? <Table tasks={tasks} /> : <>No Task</>}
+        <Modal
+          // modalType="new task"
+          // modalOpen={modalOpen}
+          // setModalOpen={setModalOpen}
         />
-      </label>
-      {tasks.length ? <Table tasks={tasks} /> : <>No Task</>}
-
+      </ModalProvider>
     </>
   );
 }

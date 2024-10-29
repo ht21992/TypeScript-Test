@@ -1,3 +1,4 @@
+import { useModal } from "../context/modalContext";
 export interface TaskProps {
   status: string;
   title: string;
@@ -10,6 +11,8 @@ const Task: React.FC<TaskProps> = (props) => {
     "To Do": "badge-ghost",
     Done: "badge-success",
   };
+
+  const { setModalOpen, setmModalType } = useModal();
 
   return (
     <tr>
@@ -28,7 +31,7 @@ const Task: React.FC<TaskProps> = (props) => {
       <td>{props.title}</td>
 
       <th>
-        <button className="btn btn-ghost btn-xs">details</button>
+        <button className="btn btn-ghost btn-xs" onClick={() => {setmModalType("task");setModalOpen(true)}}>details</button>
       </th>
     </tr>
   );
